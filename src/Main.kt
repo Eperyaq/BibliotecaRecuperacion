@@ -1,14 +1,14 @@
 fun main() {
 
     //Creamos los libros
-    val libro1 = Libro("1a","Los juguetes", "Yo", 22,"Miedo",TipoEstado.DISPONIBLE)
-    val libro2 = Libro("12a","Los Perros", "Manuel jesus", 217,"Risa",TipoEstado.DISPONIBLE)
-    val libro3 = Libro("111111b","Los Gatos", "Oscar", 2022,"Ficcion")
-    val libro4 = Libro("14424F","Animales", "Alejandro", 2012,"Terror")
-    val libro5 = Libro("12231J","Colores", "Manuel Bouza", 1982,"Ficcion")
-    val libro6 = Libro("dqasd","Risas fuertes", "Pedro picapiedras", 8,"Comedia")
-    val libro7 = Libro("Hola","Bomba nuclear", "Jose raul", 99,"Intriga")
-    val libro8 = Libro("166ll","Magia", "Hermenegildo", 1082,"Romance")
+    val libro1 = Libro(titulo = "Los juguetes", autor =  "Yo", anioPublicacion =  22, tematica = "Miedo", estado = TipoEstado.DISPONIBLE)
+    val libro2 = Libro(titulo = "Los Perros", autor = "Manuel jesus", anioPublicacion = 217, tematica = "Risa", estado = TipoEstado.DISPONIBLE)
+    val libro3 = Libro(titulo = "Los Gatos", autor =  "Oscar", anioPublicacion =  2022, tematica = "Ficcion")
+    val libro4 = Libro(titulo = "Animales", autor =  "Alejandro", anioPublicacion =  2012, tematica = "Terror")
+    val libro5 = Libro(titulo = "Colores", autor =  "Manuel Bouza", anioPublicacion =  1982, tematica = "Ficcion")
+    val libro6 = Libro(titulo = "Risas fuertes", autor =  "Pedro picapiedras", anioPublicacion =  8, tematica = "Comedia")
+    val libro7 = Libro(titulo = "Bomba nuclear", autor =  "Jose raul", anioPublicacion =  99, tematica = "Intriga")
+    val libro8 = Libro(titulo = "Magia", autor =  "Hermenegildo", anioPublicacion =  1082, tematica = "Romance")
 
     //Creamos las instancias necesarias para que funcione la biblioteca
     val catalogo = Catalogo()
@@ -30,10 +30,17 @@ fun main() {
     biblioteca.prestar(libro1)
     biblioteca.prestar(libro1)//Repetido para que salga mal a posta
 
+
     //Realizamos las devoluciones
     biblioteca.devolver(libro1)
     biblioteca.devolver(libro2)
     biblioteca.devolver(libro1)//Erroneo a posta
+
+    //Borro algunos libros
+    biblioteca.eliminar(libro3, catalogo)
+    biblioteca.eliminar(libro4, catalogo)
+    biblioteca.eliminar(libro5, catalogo)
+
 
     Consola.mostrarLibros(catalogo, biblioteca)
 

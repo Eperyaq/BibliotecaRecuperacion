@@ -6,6 +6,8 @@ class GestorBiblioteca(catalogo: Catalogo, prestamos: RegistroPrestamos) {
      * @param catalogo el catalogo al que se esta agregando el libro
      */
     fun agregar(libro: Libro, catalogo: Catalogo) {
+        //Se le deberia asignar un UUID aqui pero ya lo asigne en el libro, asi hago un poquito de SRP y esto solo controla las entradas y los prestamos
+        // aunque falta por hacer SRP pero no me voy a adelantar
         catalogo.listalibros.add(libro)
     }
 
@@ -51,7 +53,10 @@ class GestorBiblioteca(catalogo: Catalogo, prestamos: RegistroPrestamos) {
      */
     fun consultarDisponibilidad(libro: Libro, catalogo: Catalogo)= libro in catalogo.listalibros //True, si esta, False no esta
 
-
+    /**
+     * Muestra todos los libros disponibles en ese momento
+     * @param catalogo Lugar donde se guardan los libros
+     */
     fun mostrarlibrosDisponibles(catalogo: Catalogo){
 
         val listaDisponibles = mutableListOf<Libro>()
@@ -66,6 +71,10 @@ class GestorBiblioteca(catalogo: Catalogo, prestamos: RegistroPrestamos) {
 
     }
 
+    /**
+     * Muestra los libros que no están disponibles
+     * @param catalogo lugar donde se guardan los libros
+     */
     fun mostrarlibrosPrestados(catalogo: Catalogo){
 
         val listaPrestados = mutableListOf<Libro>()

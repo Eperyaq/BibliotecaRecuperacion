@@ -1,3 +1,5 @@
+import java.util.UUID
+
 /**
  * Clase de datos que representa un libro.
  *
@@ -12,10 +14,9 @@
  * @property estado El estado del libro, que puede ser uno de los tipos de [TipoEstado].
  * @constructor Crea un nuevo libro con el ID, título, autor, año de publicación, temática y estado dados.
  */
-data class Libro(val id:String, val titulo:String, val autor:String, val anioPublicacion:Int, val tematica:String, var estado: TipoEstado = TipoEstado.DISPONIBLE){
+data class Libro(var id: UUID = UtilidadesBiblioteca.generarIdentificadorUnico(), val titulo:String, val autor:String, val anioPublicacion:Int, val tematica:String, var estado: TipoEstado = TipoEstado.DISPONIBLE){
 
     init {
-        require(id.isNotEmpty()){"El id no puede estar vacio"}
         require(titulo.isNotEmpty()){"El titulo no puede estar vacio"}
         require(autor.isNotEmpty()){"El autor no puede estar vacio"}
         require(anioPublicacion in 1..2024){"El año de publicacion debe estar entre 1 y 2024"}
