@@ -9,7 +9,7 @@
  * @property listaLibrosPrestados La lista de libros que ha prestado el usuario.
  * @constructor Crea un nuevo usuario con el ID, nombre y lista de libros prestados dados.
  */
-class Usuario(private val nombre:String, private val listaLibrosPrestados:MutableList<Libro>) {
+class Usuario(private val nombre:String, private val listaLibrosPrestados:MutableList<ElementoBiblioteca>) {
     //Lista de libros que se le han prestado
     private var id = nuevoId() // Lo pongo aqui para que no haga falta que se le de un ID al usuario y que asi sea automático
     companion object{
@@ -31,16 +31,16 @@ class Usuario(private val nombre:String, private val listaLibrosPrestados:Mutabl
      * Agrega un libro a la lista de libros prestados de este usuario
      * @param libro que se le presta al usuario
      */
-    fun agregar(libro: Libro){
-        listaLibrosPrestados.add(libro)
+    fun agregar(elemento:ElementoBiblioteca){
+        listaLibrosPrestados.add(elemento)
     }
 
     /**
      * Elimina un libro de la lista de libros prestados de este usuario
      * @param libro el libro que se elimina de la lista
      */
-    fun eliminar(libro: Libro){
-        listaLibrosPrestados.remove(libro)
+    fun eliminar(elemento: ElementoBiblioteca){
+        listaLibrosPrestados.remove(elemento)
     }
 
     /**

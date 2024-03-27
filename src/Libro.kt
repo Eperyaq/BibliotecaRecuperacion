@@ -18,7 +18,7 @@ data class Libro(val id: UUID = UtilidadesBiblioteca.generarIdentificadorUnico()
                  private val titulo:String, private val autor:String,
                  private val anioPublicacion:Int,
                  private val tematica:String,
-                 var estado: TipoEstado = TipoEstado.DISPONIBLE){
+                 var estado: TipoEstado = TipoEstado.DISPONIBLE): ElementoBiblioteca(id, titulo, estado), Prestable {
 
     init {
         require(titulo.isNotEmpty()){"El titulo no puede estar vacio"}
@@ -31,7 +31,7 @@ data class Libro(val id: UUID = UtilidadesBiblioteca.generarIdentificadorUnico()
     /**
      * obtiene el titulo
      */
-    fun obtenerTitulo() = titulo
+    override fun obtenerTitulo() = titulo
 
     /**
      * obtiene el año de publicacion
@@ -42,4 +42,26 @@ data class Libro(val id: UUID = UtilidadesBiblioteca.generarIdentificadorUnico()
      * obtiene la tematica del libro
      */
     fun obtenerTematica() = tematica
+
+    /**
+     * Realiza la accion de prestar un libro lo que cambia su estado de Disponible a prestado
+     */
+    override fun prestar() {
+        if ( estado == TipoEstado.DISPONIBLE ){
+            estado = TipoEstado.PRESTADO
+        } else {
+            Consola.mostrarInfo("Ya prestado" )
+        }
+    }
+
+    /**
+     * Realiza la accion de devolver un libro lo que cambia su estado de Prestado a disponible
+     */
+    override fun devolver() {
+        if ( estado == TipoEstado.PRESTADO ) {
+             estado = TipoEstado.DISPONIBLE
+        } else {
+            Consola.mostrarInfo("Ya devuelto")
+        }
+    }
 }

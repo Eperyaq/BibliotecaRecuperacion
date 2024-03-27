@@ -1,6 +1,6 @@
 class Catalogo() {
 
-    val listalibros = mutableListOf<Libro>()
+    val listalibros = mutableListOf<ElementoBiblioteca>()
 
 
 }

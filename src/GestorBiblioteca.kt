@@ -1,95 +1,102 @@
-class GestorBiblioteca() {
-    private val catalogo = Catalogo()
-    private val prestamos = RegistroPrestamos()
+import java.util.UUID
+
+class GestorBiblioteca(private val gestorPrestamo:IGestorPrestamos, private val catalogo: Catalogo) {
 
     /**
      * Agrega un libro al catalogo, a la lista con todos los libros
-     * @param libro el libro a agregar al catalogo
-     * @param catalogo el catalogo al que se esta agregando el libro
+     * @param elemento el elemento a agregar al catalogo
      */
-    fun agregar(libro: Libro) {
+    fun agregar(elemento: ElementoBiblioteca) {
         //Se le deberia asignar un UUID aqui pero ya lo asigne en el libro, asi hago un poquito de SRP y esto solo controla las entradas y los prestamos
         // aunque falta por hacer SRP pero no me voy a adelantar
-        if (libro !in catalogo.listalibros){ // Comprueba que el libro no está en el catalogo, si no, lo añade
-            catalogo.listalibros.add(libro)
-        }else{
-            Consola.mostrarInfo("El libro ya está en el catalogo")
+        if (elemento !in catalogo.listalibros) { // Comprueba que el libro no está en el catalogo, si no, lo añade
+            catalogo.listalibros.add(elemento)
+        } else {
+            Consola.mostrarInfo("El elemento ya está en el catalogo")
         }
 
     }
 
     /**
-     * Elimina un libro del catalogo
-     * @param libro el libro a eliminar
+     * Elimina un elemento del catalogo
+     * @param elemento el elemento a eliminar
      */
-    fun eliminar(libro: Libro){
-        if (libro in catalogo.listalibros){
-            catalogo.listalibros.remove(libro)
-        }else{
-            Consola.mostrarInfo("El libro no está en el catálogo")
+    fun eliminar(elemento: ElementoBiblioteca) {
+        if (elemento in catalogo.listalibros) {
+            catalogo.listalibros.remove(elemento)
+        } else {
+            Consola.mostrarInfo("El elemento no está en el catálogo")
         }
     }
 
     /**
      * Realiza el préstamo de un libro, y por lo tanto cambia su estado pero no sin antes comprobarlo
-     * @param libro Libro que se va a prestar
-     * @param prestamos Lugar donde se quedan los prestamos archivados
+     * @param usuario Usuario al que se le va a prestar el elemento
+     * @param elemento elemento que se va a prestar
      */
-    fun prestar(usuario:Usuario, libro: Libro){
+    fun prestar(usuario: Usuario, elemento: ElementoBiblioteca) {
 
-        if (libro.estado == TipoEstado.DISPONIBLE){
+        if (elemento.obtenerEstado() == TipoEstado.DISPONIBLE) {
+            elemento.cambiarEstado(TipoEstado.PRESTADO)
 
-            libro.estado = TipoEstado.PRESTADO
+            gestorPrestamo.registrarPrestamo(elemento.obtenerId(), usuario)
 
-            prestamos.registrarPrestamo(libro, usuario)// con este se mete en el historial y en el otro
+            usuario.agregar(elemento) //se le agrega el libro al usuario que se le preste el libro
 
-        }else{
-            Consola.mostrarInfo("El libro ya estaba prestado")
-        }
-    }
-
-    /**
-     * Realiza la devolucion de un libro, y por lo tanto cambia su estado pero no sin antes comprobarlo
-     * @param libro Libro que se va a devolver
-     * @param prestamos Lugar donde se quedan los prestamos archivados
-     */
-    fun devolver(usuario: Usuario, libro: Libro){
-
-        if (libro.estado == TipoEstado.PRESTADO){
-            libro.estado = TipoEstado.DISPONIBLE
-
-            prestamos.devolverPrestamo(usuario, libro)
-        }else{
-            Consola.mostrarInfo("El libro ya estaba devuelto")
-        }
-    }
-
-    /**
-     * Consulta la disponibilidad del libro si es True, el libro está disponible, si no, no lo está
-     * @param libro libro a comprobar
-     * @param catalogo lugar en el que mirar si esta el [libro]
-     */
-    fun consultarDisponibilidad( libro: Libro ){
-        if ( libro in catalogo.listalibros ) {
-            Consola.mostrarInfo("Libro encontrado")
         } else {
-            Consola.mostrarInfo("Libro no encontrado")
+            Consola.mostrarInfo("El elemento ya estaba prestado")
         }
-    } //True, si esta, False no esta
+    }
+
+    /**
+     * Realiza la devolucion de un elemento, y por lo tanto cambia su estado pero no sin antes comprobarlo
+     * @param usuario Usuario que va a devolver el elemento
+     * @param elemento Elemento que se va a devolver
+     *
+     */
+    fun devolver(usuario: Usuario, elemento: ElementoBiblioteca) {
+
+        if (elemento.obtenerEstado() == TipoEstado.PRESTADO) {
+            elemento.cambiarEstado(TipoEstado.DISPONIBLE)
+
+            gestorPrestamo.registrarDevolucion(elemento.obtenerId(), usuario)
+
+            usuario.eliminar(elemento)
+        } else {
+            Consola.mostrarInfo("El Elemento ya estaba devuelto")
+        }
+    }
+
+    /**
+     * Consulta la disponibilidad del elemento
+     * @param id id del elemento a comprobar
+     */
+    fun consultarDisponibilidad(id: UUID) {
+        val elemento =
+            catalogo.listalibros.find { elemento -> elemento.obtenerId() == id } //lambda que comprueba si el id del elemento es igual a algun id que este en catalogo
+
+        if (elemento != null) {
+            if (elemento.obtenerEstado() == TipoEstado.DISPONIBLE) {
+                Consola.mostrarInfo("elemento disponible")
+            }
+        } else {
+            Consola.mostrarInfo("elemento no Disponible")
+        }
+    }
 
     /**
      * Muestra todos los libros disponibles en ese momento
-     * @param catalogo Lugar donde se guardan los libros
      */
-    fun mostrarlibrosDisponibles(){
+    fun mostrarlibrosDisponibles() {
 
-        val listaDisponibles = mutableListOf<Libro>()
+        val listaDisponibles = mutableListOf<ElementoBiblioteca>()
 
-         val disponibles = catalogo.listalibros.filter { libroDispo -> libroDispo.estado == TipoEstado.DISPONIBLE }
+        val disponibles =
+            catalogo.listalibros.filter { libroDispo -> libroDispo.obtenerEstado() == TipoEstado.DISPONIBLE }
 
         listaDisponibles.addAll(disponibles)
 
-        for (libro in listaDisponibles){
+        for (libro in listaDisponibles) {
             Consola.mostrarInfo("$libro")
         }
 
@@ -97,37 +104,22 @@ class GestorBiblioteca() {
 
     /**
      * Muestra los libros que no están disponibles
-     * @param catalogo lugar donde se guardan los libros
      */
-    fun mostrarlibrosPrestados(){
+    fun mostrarlibrosPrestados() {
 
-        val listaPrestados = mutableListOf<Libro>()
+        val listaPrestados = mutableListOf<ElementoBiblioteca>()
 
-        val disponibles = catalogo.listalibros.filter { libroNoDispo -> libroNoDispo.estado == TipoEstado.PRESTADO }
+        val disponibles =
+            catalogo.listalibros.filter { libroNoDispo -> libroNoDispo.obtenerEstado() == TipoEstado.PRESTADO }
 
         listaPrestados.addAll(disponibles)
 
-        for (libro in listaPrestados){
+        for (libro in listaPrestados) {
             Consola.mostrarInfo("$libro")
         }
 
     }
 
-    /**
-     * Muestra el historial del libro llamando a la funcion necesaria
-     * @param usuario Usuario al que se le va a mirar el historial
-     */
-    fun mostrarHistorialUsuario(usuario: Usuario){
 
-        prestamos.historialPrestamoUsuario(usuario)
-    }
 
-    /**
-     * Muestra el historial del libro especifico llamando a la funcion necesaria
-     * @param libro Libro del que se va a mostrar en el historial
-     */
-    fun mostrarHistorialLibro(libro: Libro){
-
-        prestamos.historialLibroEspecifico(libro)
-    }
 }
