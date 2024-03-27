@@ -1,5 +1,5 @@
-class Catalogo {
-    //es como una pila
+class Catalogo() {
+
     val listalibros = mutableListOf<Libro>()
 
 

@@ -9,22 +9,40 @@ object Consola {
     }
 
     /**
+     * Pregunta por un String y comprueba que se meta un valor especifico
+     */
+    fun preguntarString(text: String): String{
+
+        var respuesta = ""
+
+        while ( respuesta.isBlank() ) {
+            mostrarInfo( text )
+            try {
+                respuesta = readln()
+            } catch ( e: Exception ) {
+                mostrarInfo("ERROR, introduzca un valor correcto")
+            }
+        }
+        return respuesta
+    }
+
+    /**
      * Solicita al usuario introducir un numero a traves de la consola
      *
      * Hasta que no introduce un numero correcto no va a parar de preguntar por ese numero
      *
      * @return El numero introducido por el usuario
      */
-    fun preguntarnum():Int{
+    private fun preguntarnum(): Int {
         var penguin = true
         var numero= 0
 
-        while (penguin){
+        while ( penguin ) {
             try {
                 numero = readln().toInt()
                 penguin = false
-            }catch (e: NumberFormatException){
-                println("Inserte un numero válido")
+            } catch ( e: NumberFormatException ) {
+                mostrarInfo("Inserte un numero válido")
             }
         }
         return numero
@@ -37,7 +55,7 @@ object Consola {
      * @throws IllegalArgumentException Si el numero introducido por consola es mayor que [maxop] o igual que 0
      * @return opcion La opcion escogida
      */
-    fun opciones(maxop:Int):Int{
+     fun opciones(maxop:Int):Int{
         mostrarInfo("Escoge tu opcion: ")
         var opcion = preguntarnum()
         var pinguinito = true
@@ -68,11 +86,9 @@ object Consola {
         val opcion = opciones(3)
 
         when(opcion){
-            1-> mostrarInfo("${catalogo.listalibros}")
-            2-> biblioteca.mostrarlibrosDisponibles(catalogo)
-            3-> biblioteca.mostrarlibrosPrestados(catalogo)
+            1-> mostrarInfo("${catalogo.listalibros}") //Todos
+            2-> biblioteca.mostrarlibrosDisponibles() //Los disponibles
+            3-> biblioteca.mostrarlibrosPrestados() //Los NO disponibles
         }
     }
-
-
 }

@@ -1,53 +1,42 @@
 fun main() {
+    //Cosas a tener en cuenta, aunque el menú no diga nada, cuando añades un libro o borras o haces cualquier cosa, aunque no ponga nada, ningun print ni nada, lo está haciendo correctamente
+
+    //Creamos los usuarios
+    val listaUsuario = listOf(
+     Usuario(nombre = "Elia"),
+     Usuario(nombre = "Ale"),
+     Usuario(nombre = "Oscar")
+    )
 
     //Creamos los libros
-    val libro1 = Libro(titulo = "Los juguetes", autor =  "Yo", anioPublicacion =  22, tematica = "Miedo", estado = TipoEstado.DISPONIBLE)
-    val libro2 = Libro(titulo = "Los Perros", autor = "Manuel jesus", anioPublicacion = 217, tematica = "Risa", estado = TipoEstado.DISPONIBLE)
-    val libro3 = Libro(titulo = "Los Gatos", autor =  "Oscar", anioPublicacion =  2022, tematica = "Ficcion")
-    val libro4 = Libro(titulo = "Animales", autor =  "Alejandro", anioPublicacion =  2012, tematica = "Terror")
-    val libro5 = Libro(titulo = "Colores", autor =  "Manuel Bouza", anioPublicacion =  1982, tematica = "Ficcion")
-    val libro6 = Libro(titulo = "Risas fuertes", autor =  "Pedro picapiedras", anioPublicacion =  8, tematica = "Comedia")
-    val libro7 = Libro(titulo = "Bomba nuclear", autor =  "Jose raul", anioPublicacion =  99, tematica = "Intriga")
-    val libro8 = Libro(titulo = "Magia", autor =  "Hermenegildo", anioPublicacion =  1082, tematica = "Romance")
+    val listaLibro = listOf(
+    Libro(titulo = "Los juguetes", autor =  "Yo", anioPublicacion =  22, tematica = "Miedo", estado = TipoEstado.DISPONIBLE),
+    Libro(titulo = "Los Perros", autor = "Manuel jesus", anioPublicacion = 217, tematica = "Risa", estado = TipoEstado.DISPONIBLE),
+    Libro(titulo = "Los Gatos", autor =  "Oscar", anioPublicacion =  2022, tematica = "Ficcion"),
+    Libro(titulo = "Animales", autor =  "Alejandro", anioPublicacion =  2012, tematica = "Terror"),
+    Libro(titulo = "Colores", autor =  "Manuel Bouza", anioPublicacion =  1982, tematica = "Ficcion"),
+    Libro(titulo = "Risas fuertes", autor =  "Pedro picapiedras", anioPublicacion =  8, tematica = "Comedia"),
+    Libro(titulo = "Bomba nuclear", autor =  "Jose raul", anioPublicacion =  99, tematica = "Intriga"),
+    Libro(titulo = "Magia", autor =  "Hermenegildo", anioPublicacion =  1082, tematica = "Romance")
+    )
 
     //Creamos las instancias necesarias para que funcione la biblioteca
     val catalogo = Catalogo()
-    val prestamos = RegistroPrestamos()
-    val biblioteca = GestorBiblioteca(catalogo, prestamos)
+    val biblioteca = GestorBiblioteca()
 
-    //Agregamos los libros a la biblioteca
-    biblioteca.agregar(libro1, catalogo)
-    biblioteca.agregar(libro2, catalogo)
-    biblioteca.agregar(libro3, catalogo)
-    biblioteca.agregar(libro4, catalogo)
-    biblioteca.agregar(libro5, catalogo)
-    biblioteca.agregar(libro6, catalogo)
-    biblioteca.agregar(libro7, catalogo)
-    biblioteca.agregar(libro8, catalogo)
+    //Visualizar propiedades privadas, descomentar si quieres ver
+/*
+    Consola.mostrarInfo(listaLibro.random().obtenerTitulo())
+    Consola.mostrarInfo(listaLibro.random().obtenerTematica())
+    Consola.mostrarInfo("${listaUsuario.random().obtenerid()}")
+    Consola.mostrarInfo(listaUsuario.random().obtenerNombre())
 
-    //Realizamos los prestamos
-    biblioteca.prestar(libro2)
-    biblioteca.prestar(libro1)
-    biblioteca.prestar(libro1)//Repetido para que salga mal a posta
-
-
-    //Realizamos las devoluciones
-    biblioteca.devolver(libro1)
-    biblioteca.devolver(libro2)
-    biblioteca.devolver(libro1)//Erroneo a posta
-
-    //Borro algunos libros
-    biblioteca.eliminar(libro3, catalogo)
-    biblioteca.eliminar(libro4, catalogo)
-    biblioteca.eliminar(libro5, catalogo)
-
-
-    Consola.mostrarLibros(catalogo, biblioteca)
-
-
-    /* mas adelante cuando busquemos los libros por ID
+ */
+    /**
+     * Menú que te deja interactuar de distintas maneras con la biblioteca
+     */
     fun menu(){
-        val pinguinito = true
+        var pinguinito = true
 
         Consola.mostrarInfo("Bienvenido a esta maravillosa Biblioteca creada por Eliaser Pérez")
         do {
@@ -58,18 +47,23 @@ fun main() {
                     "4-> Devolver un libro.\n" +
                     "5-> Consultar la disponibilidad de un libro. \n" +
                     "6-> Mostrar libros dependiendo de su estado (Disponibles, Prestados, Todos)\n" +
-                    "7-> Salir.")
-
-            val opciones =Consola.opciones(7)
+                    "7-> Salir."
+            )
+            val opciones = Consola.opciones(7)
 
             when (opciones){
-                1-> biblioteca.agregar()
+                1-> biblioteca.agregar(listaLibro.random()) //Escoge un libro random de la lista y lo añade
+                2-> biblioteca.eliminar(listaLibro.random()) //Lo mismo pero esta vez lo elimina de la lista
+                3-> biblioteca.prestar(listaUsuario.random(), listaLibro.random()) //Escoge un usuario Random y un libro random para prestarle un libro a un usuario
+                4-> biblioteca.devolver(listaUsuario.random(), listaLibro.random()) // Lo mismo pero devuelve un libro
+                5-> biblioteca.consultarDisponibilidad(listaLibro.random())
+                6-> Consola.mostrarLibros(catalogo, biblioteca) //Pequeño fallo aqui que no se porque, cuando quieres mirar todos los libros no te muestra ninguno, pero si que tiene, he usado el debugger y se agregan bien pero al mostrar TODOS los libros no muestra ninguno
+                7-> pinguinito = false
             }
 
-        }while (pinguinito)
-
-
+        }while ( pinguinito )
     }
+    //Llamamos al menú para que funcione la biblioteca
+    menu()
 
-     */
 }
