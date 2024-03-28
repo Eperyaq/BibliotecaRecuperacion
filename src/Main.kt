@@ -1,10 +1,18 @@
 fun main() {
     /*
-   Integrar la jerarquía de clases con el sistema de gestión existente,
-    permitiendo que GestorBiblioteca interactúe con el Catalogo para realizar operaciones sobre ítems de la biblioteca.
+   He querido usar la biblioteca kotlinx.Serialization 1.2 pero como es de gradel y estoy usando kotlin ahora mismo no puedo usarlo aqui
+   He conseguido añadir la libreria, pero no se como integrarla en este codigo, me he leido toda la documentacion y se lo que hace, sirve para por ejemplo serializar el codigo y pasarlo de manera
+   mas rapida a JSON, he visto ejemplos de usarlo en un innit, he querido implementarlo en mi codigo pero realmente lo unico que hace es poner @Serializable
+   arriba de la clase y luego usar un innit normal asi que no se.. un poco palo
 
-    el GestorBiblioteca ya tiene acceso al catalogo gracias a GestorElementos, deberia inyectarle igualmente el catalogo? de hecho el catalogo agrega las cosas al gestor de los elementos
+   @Serializable
+    class Project(val name: String) {
+    init {
+        require(name.isNotEmpty()) { "name cannot be empty" }
+    }
+}
 
+    Es un innit totalmente normal, lo unico que tiene @Serializable
     */
 
     //Creamos los usuarios
