@@ -23,5 +23,12 @@ class Catalogo<T:ElementoBiblioteca>(private val gestorElementos:GestorElementos
             gestorElementos.eliminar(elemento)
     }
 
+    /**
+     * Busca un elemento basandose en el id del elemento
+     * @param elemento Elemento que se va a buscar en el catalogo
+     */
+    fun buscarElemento(elemento: T){
+        gestorElementos.listaElemento.find { it.obtenerId() == elemento.obtenerId() } // Comprueba si el id del elemento que hay en la lista de elementos es igual al id del elemento que se le pasa por parametro
+    }
 
 }

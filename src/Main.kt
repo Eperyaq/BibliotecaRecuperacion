@@ -1,7 +1,10 @@
 fun main() {
     /*
-    Cosas que no entiendo muy bien, la clase GestorElemento es igual que el catalogo, pero no hereda IGestorCatalogo, en el enunciado dice que hay que refactorizar, pero entonces borro el catalogo?
-    o las dos clases hacen lo mismo??
+   Integrar la jerarquía de clases con el sistema de gestión existente,
+    permitiendo que GestorBiblioteca interactúe con el Catalogo para realizar operaciones sobre ítems de la biblioteca.
+
+    el GestorBiblioteca ya tiene acceso al catalogo gracias a GestorElementos, deberia inyectarle igualmente el catalogo? de hecho el catalogo agrega las cosas al gestor de los elementos
+
     */
 
     //Creamos los usuarios
@@ -14,11 +17,11 @@ fun main() {
     //Creamos los libros
 
     val listaElementos = listOf(
-        Dvd(titulo="Escondite video"),
-        Dvd(titulo = "Los chichos", estado = TipoEstado.DISPONIBLE),
+        Dvd(titulo="Escondite video", duracion = 20.5, genero = "Horror"),
+        Dvd(titulo = "Los chichos", estado = TipoEstado.DISPONIBLE, duracion = 15.0, genero = "Risa"),
         Libro(titulo = "Los juguetes", autor =  "Yo", anioPublicacion =  22, tematica = "Miedo", estado = TipoEstado.DISPONIBLE),
         Libro(titulo = "Los Gatos", autor =  "Oscar", anioPublicacion =  2022, tematica = "Ficcion"),
-        Libro(titulo = "Magia", autor =  "Hermenegildo", anioPublicacion =  1082, tematica = "Romance")
+        LibroElectronico(titulo = "HolaMundo", formatoDigital = true, tamanioArchivo = 55)
     )
 
 
@@ -28,16 +31,6 @@ fun main() {
     val gestorBiblioteca = RegistroPrestamos() // Creamos una variable de una clase que haya heredado el Igestor para poder meterlo en el constructor de la biblioteca ya que un interfaz no se puede instanciar por si solo.
     val biblioteca = GestorBiblioteca(gestorBiblioteca,gestorElementos)
 
-
-
-    //Visualizar propiedades privadas, descomentar si quieres ver
-/*
-    Consola.mostrarInfo(listaLibro.random().obtenerTitulo())
-    Consola.mostrarInfo(listaLibro.random().obtenerTematica())
-    Consola.mostrarInfo("${listaUsuario.random().obtenerid()}")
-    Consola.mostrarInfo(listaUsuario.random().obtenerNombre())
-
- */
 
     /**
      * Menú que te deja interactuar de distintas maneras con la biblioteca
