@@ -1,36 +1,14 @@
 import java.util.UUID
 
-class GestorBiblioteca(private val gestorPrestamo:IGestorPrestamos, private val catalogo: Catalogo) {
+/**
+ * Clase que representa el gestor de la biblioteca, encargado de prestar, devolver, consultar disponibilidad y mostrar los libros disponibles y no disponibles
+ * @property gestorElementos Gestor de elementos que funciona como el catálogo, se encarga de guardar los libros
+ * @property gestorPrestamo Gestor de prestamos encargado de controlar los prestamos
+ */
+class GestorBiblioteca(private val gestorPrestamo:IGestorPrestamos, private val gestorElementos: GestorElementos<ElementoBiblioteca>) {
 
     /**
-     * Agrega un libro al catalogo, a la lista con todos los libros
-     * @param elemento el elemento a agregar al catalogo
-     */
-    fun agregar(elemento: ElementoBiblioteca) {
-        //Se le deberia asignar un UUID aqui pero ya lo asigne en el libro, asi hago un poquito de SRP y esto solo controla las entradas y los prestamos
-        // aunque falta por hacer SRP pero no me voy a adelantar
-        if (elemento !in catalogo.listalibros) { // Comprueba que el libro no está en el catalogo, si no, lo añade
-            catalogo.listalibros.add(elemento)
-        } else {
-            Consola.mostrarInfo("El elemento ya está en el catalogo")
-        }
-
-    }
-
-    /**
-     * Elimina un elemento del catalogo
-     * @param elemento el elemento a eliminar
-     */
-    fun eliminar(elemento: ElementoBiblioteca) {
-        if (elemento in catalogo.listalibros) {
-            catalogo.listalibros.remove(elemento)
-        } else {
-            Consola.mostrarInfo("El elemento no está en el catálogo")
-        }
-    }
-
-    /**
-     * Realiza el préstamo de un libro, y por lo tanto cambia su estado pero no sin antes comprobarlo
+     * Realiza el préstamo de un elemento, y por lo tanto cambia su estado pero no sin antes comprobarlo
      * @param usuario Usuario al que se le va a prestar el elemento
      * @param elemento elemento que se va a prestar
      */
@@ -73,7 +51,7 @@ class GestorBiblioteca(private val gestorPrestamo:IGestorPrestamos, private val 
      */
     fun consultarDisponibilidad(id: UUID) {
         val elemento =
-            catalogo.listalibros.find { elemento -> elemento.obtenerId() == id } //lambda que comprueba si el id del elemento es igual a algun id que este en catalogo
+            gestorElementos.listaElemento.find { elemento -> elemento.obtenerId() == id } //lambda que comprueba si el id del elemento es igual a algun id que este en catalogo
 
         if (elemento != null) {
             if (elemento.obtenerEstado() == TipoEstado.DISPONIBLE) {
@@ -92,7 +70,7 @@ class GestorBiblioteca(private val gestorPrestamo:IGestorPrestamos, private val 
         val listaDisponibles = mutableListOf<ElementoBiblioteca>()
 
         val disponibles =
-            catalogo.listalibros.filter { libroDispo -> libroDispo.obtenerEstado() == TipoEstado.DISPONIBLE }
+            gestorElementos.listaElemento.filter { libroDispo -> libroDispo.obtenerEstado() == TipoEstado.DISPONIBLE }
 
         listaDisponibles.addAll(disponibles)
 
@@ -110,7 +88,7 @@ class GestorBiblioteca(private val gestorPrestamo:IGestorPrestamos, private val 
         val listaPrestados = mutableListOf<ElementoBiblioteca>()
 
         val disponibles =
-            catalogo.listalibros.filter { libroNoDispo -> libroNoDispo.obtenerEstado() == TipoEstado.PRESTADO }
+            gestorElementos.listaElemento.filter { libroNoDispo -> libroNoDispo.obtenerEstado() == TipoEstado.PRESTADO }
 
         listaPrestados.addAll(disponibles)
 

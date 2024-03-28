@@ -1,5 +1,9 @@
 import java.util.UUID
 
+/**
+ * Clase la cual se encarga de registrar los prestamos de los elemento
+ * Habiendo derivado esta de la interfaz IGestorPrestamos
+ */
 class RegistroPrestamos: IGestorPrestamos {
 
     //He tenido que cambiar esta clase casi entera porque si no al usar el IGestorPrestamos al ser un elemento y no un libro especifico si le paso por parametros el libro se quedaria

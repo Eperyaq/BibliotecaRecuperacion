@@ -6,11 +6,11 @@
  *
  * @property id El identificador único del usuario.
  * @property nombre El nombre del usuario.
- * @property listaLibrosPrestados La lista de libros que ha prestado el usuario.
+ * @property listaElementosPrestados La lista de elementos que ha prestado el usuario.
  * @constructor Crea un nuevo usuario con el ID, nombre y lista de libros prestados dados.
  */
-class Usuario(private val nombre:String, private val listaLibrosPrestados:MutableList<ElementoBiblioteca>) {
-    //Lista de libros que se le han prestado
+class Usuario(private val nombre:String, private val listaElementosPrestados:MutableList<ElementoBiblioteca>) {
+
     private var id = nuevoId() // Lo pongo aqui para que no haga falta que se le de un ID al usuario y que asi sea automático
     companion object{
         private var id:Int = 1
@@ -21,33 +21,32 @@ class Usuario(private val nombre:String, private val listaLibrosPrestados:Mutabl
         //Companion object creado para que cada vez que se instancie un usuario le de un ID nuevo y que asi no se repitan
     }
     /**
-     * Constructor para instanciar un objeto usando solo el id y el nombre
-     * @param id identificador de un usuario
+     * Constructor para instanciar un objeto usando solo el nombre
      * @param nombre del usuario
      */
     constructor(nombre: String): this(nombre, mutableListOf())
 
     /**
-     * Agrega un libro a la lista de libros prestados de este usuario
-     * @param libro que se le presta al usuario
+     * Agrega un elemento a la lista de elementos prestados de este usuario
+     * @param elemento que se le presta al usuario
      */
     fun agregar(elemento:ElementoBiblioteca){
-        listaLibrosPrestados.add(elemento)
+        listaElementosPrestados.add(elemento)
     }
 
     /**
-     * Elimina un libro de la lista de libros prestados de este usuario
-     * @param libro el libro que se elimina de la lista
+     * Elimina un libro de la lista de elementos prestados de este usuario
+     * @param elemento el elemento que se elimina de la lista
      */
     fun eliminar(elemento: ElementoBiblioteca){
-        listaLibrosPrestados.remove(elemento)
+        listaElementosPrestados.remove(elemento)
     }
 
     /**
-     * Muestra los libros que tiene en propiedad este usuario
+     * Muestra los elementos que tiene en propiedad este usuario
      */
     fun consultarLibrosPrestados(){
-        Consola.mostrarInfo("$listaLibrosPrestados")
+        Consola.mostrarInfo("$listaElementosPrestados")
     }
 
     /**
@@ -59,7 +58,11 @@ class Usuario(private val nombre:String, private val listaLibrosPrestados:Mutabl
      * Obtienes el nombre del usuario
      */
     fun obtenerNombre() = nombre
+
+    /**
+     * ToString modificado para que salga este cada vez que se printee
+     */
     override fun toString(): String {
-        return "Id: $id,Nombre: $nombre, Lista libros: $listaLibrosPrestados"
+        return "Id: $id,Nombre: $nombre, Lista libros: $listaElementosPrestados"
     }
 }

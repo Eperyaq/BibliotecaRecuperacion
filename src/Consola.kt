@@ -1,3 +1,6 @@
+/**
+ * Object usado para todas las cosas que se tienen que mostrar por consola
+ */
 object Consola {
 
     /**
@@ -10,6 +13,7 @@ object Consola {
 
     /**
      * Pregunta por un String y comprueba que se meta un valor especifico
+     * @param text Pregunta a hacer para que sea respondida
      */
     fun preguntarString(text: String): String{
 
@@ -78,15 +82,15 @@ object Consola {
 
     /**
      * Menu que da a escoger entre que tipos de libros quieres ver y los muestra llamando a la funcion correspondiente
-     * @param catalogo catalogo donde se guardan los libros
+     * @param gestorElementos gestor de elementos donde se guardan los libros
      * @param biblioteca Lugar que realiza los prestamos y las devoluciones
      */
-    fun mostrarLibros(catalogo: Catalogo, biblioteca: GestorBiblioteca){
+    fun mostrarLibros(gestorElementos: GestorElementos<ElementoBiblioteca>, biblioteca: GestorBiblioteca){
         mostrarInfo("Que libros quieres mostrar? \n 1. Todos los libros que hay. \n 2.Los libros disponibles. \n 3.Los libros no disponibles")
         val opcion = opciones(3)
 
         when(opcion){
-            1-> mostrarInfo("${catalogo.listalibros}") //Todos
+            1-> mostrarInfo("${gestorElementos.retornarElementos()}") //Todos
             2-> biblioteca.mostrarlibrosDisponibles() //Los disponibles
             3-> biblioteca.mostrarlibrosPrestados() //Los NO disponibles
         }
